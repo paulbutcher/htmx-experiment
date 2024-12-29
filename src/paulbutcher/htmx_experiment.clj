@@ -3,22 +3,21 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
-            [hiccup.core :refer [html]]
-            [hiccup.page :refer [html5]]))
+            [hiccup2.core :refer [html]]))
 
 (defn index-page []
-  (html5
-   [:head
-    [:title "HTMX Example"]
-    [:script {:src "https://unpkg.com/htmx.org@1.9.6"}]]
-   [:body
-    [:h1 "HTMX Example"]
-    [:div#greeting
-     {:hx-get "/greet"
-      :hx-trigger "load"}]]))
+  (str (html
+        [:head
+         [:title "HTMX Example"]
+         [:script {:src "https://unpkg.com/htmx.org@1.9.6"}]]
+        [:body
+         [:h1 "HTMX Example"]
+         [:div#greeting
+          {:hx-get "/greet"
+           :hx-trigger "load"}]])))
 
 (defn greet []
-  (html [:div "Hello, World!"]))
+  (str (html [:div "Hello, World!"])))
 
 (defroutes app-routes
   (GET "/" [] (index-page))
