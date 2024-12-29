@@ -1,9 +1,13 @@
 (ns paulbutcher.htmx-experiment
-  (:require [ring.adapter.jetty :as jetty]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [compojure.core :refer [defroutes GET]]
-            [compojure.route :as route]
-            [hiccup2.core :refer [html]]))
+  (:require
+   [aero.core :as aero]
+   [clojure.java.io :as io]
+   [compojure.core :refer [defroutes GET]]
+   [compojure.route :as route]
+   [hiccup2.core :refer [html]]
+   [ring.adapter.jetty :as jetty]
+   [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
+  (:gen-class))
 
 (defn index-page []
   (str (html
@@ -28,6 +32,8 @@
   (wrap-defaults app-routes site-defaults))
 
 (defn -main
-  [& _args]
-  (jetty/run-jetty app {:port 3000 :join? false})
-  (println "Server started on port 3000"))
+  [& _]
+  (let [config (-> "config.edn"
+                   io/resource
+                   aero/read-config)]
+    (jetty/run-jetty app (-> config :server (assoc :join? false)))))
