@@ -10,15 +10,16 @@
   (:gen-class))
 
 (defn index-page []
-  (str (html
-        [:head
-         [:title "HTMX Example"]
-         [:script {:src "https://unpkg.com/htmx.org@1.9.6"}]]
-        [:body
-         [:h1 "HTMX Example"]
-         [:div#greeting
-          {:hx-get "/greet"
-           :hx-trigger "load"}]])))
+  (str
+   (html
+    [:head
+     [:title "HTMX Example"]
+     [:script {:src "https://unpkg.com/htmx.org@1.9.6"}]]
+    [:body
+     [:h1 "HTMX Example"]
+     [:div#greeting
+      {:hx-get "/greet"
+       :hx-trigger "load"}]])))
 
 (defn greet []
   (str (html [:div "Hello, World!"])))

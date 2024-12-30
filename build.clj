@@ -2,8 +2,6 @@
   (:refer-clojure :exclude [test])
   (:require [clojure.tools.build.api :as b]))
 
-(def lib 'net.clojars.paulbutcher/htmx-experiment)
-(def version "0.1.0-SNAPSHOT")
 (def main 'paulbutcher.htmx-experiment)
 (def class-dir "target/classes")
 
@@ -19,8 +17,8 @@
 
 (defn- uber-opts [opts]
   (assoc opts
-         :lib lib :main main
-         :uber-file (format "target/%s-%s.jar" lib version)
+         :main main
+         :uber-file "target/standalone.jar"
          :basis (b/create-basis {})
          :class-dir class-dir
          :src-dirs ["src"]
