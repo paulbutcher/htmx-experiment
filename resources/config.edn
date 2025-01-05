@@ -1,3 +1,0 @@
-{:server
- {:port #long #or [#env PORT 8080]
-  :host #or [#env HOST "0.0.0.0"]}}
