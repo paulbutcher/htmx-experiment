@@ -3,7 +3,7 @@
    [compojure.core :refer [defroutes GET]]
    [compojure.route :as route]
    [hiccup2.core :refer [html]]
-   [ring.adapter.jetty :as jetty]
+   ;; [ring.adapter.jetty :as jetty]
    [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
   (:gen-class))
 
@@ -30,6 +30,6 @@
 (def app
   (wrap-defaults app-routes site-defaults))
 
-(defn -main
-  [& _]
-  (jetty/run-jetty app {:port 8080 :host "0.0.0.0" :join? false}))
+;; (defn -main
+;;   [& _]
+;;   (jetty/run-jetty app {:port 8080 :host "0.0.0.0" :join? false}))
