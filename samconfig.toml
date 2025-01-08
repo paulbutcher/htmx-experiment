@@ -1,9 +1,15 @@
 version = 0.1
-[default.deploy.parameters]
+
+[default.global.parameters]
 stack_name = "htmx-experiment"
+region = "us-east-1"
+
+[default.validate.parameters]
+lint = true
+
+[default.deploy.parameters]
 resolve_s3 = true
 s3_prefix = "htmx-experiment"
-region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
