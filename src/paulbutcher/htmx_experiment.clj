@@ -10,7 +10,7 @@
    (html
     [:head
      [:title "HTMX Example"]
-     [:script {:src "https://unpkg.com/htmx.org@1.9.6"}]]
+     [:script {:src "https://unpkg.com/htmx.org@2.0.4"}]]
     [:body
      [:h1 "HTMX Example"]
      [:div#greeting
