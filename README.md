@@ -1,18 +1,18 @@
 # paulbutcher/htmx-experiment
 
-Run the project:
-
-    $ clojure -M:run
-
 Run the project's tests:
 
     $ clojure -T:build test
 
 Debug:
 
-    $ clojure -A:dev
+    $ clojure -M:dev
     user=> :dbg
     user=> (-main)
+
+Run locally:
+
+    $ clojure -M:dev:run
 
 Check for outdated dependencies:
 
