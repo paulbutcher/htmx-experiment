@@ -2,10 +2,11 @@
 (ns paulbutcher.lambda
   (:gen-class
    :implements [com.amazonaws.services.lambda.runtime.RequestStreamHandler])
-  (:require [clojure.data.json :as json]
-            [clojure.java.io :as io]
-            [clojure.string :as str]
-            [paulbutcher.htmx-experiment :refer [app]]))
+  (:require
+   [clojure.data.json :as json]
+   [clojure.java.io :as io]
+   [clojure.string :as str]
+   [paulbutcher.htmx-experiment :refer [app]]))
 
 ; Function URL request format: https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html#urls-request-payload
 ; Ring request spec: https://github.com/ring-clojure/ring/blob/master/SPEC.md#14-request-maps
@@ -16,10 +17,10 @@
         http (get-in request ["requestContext" "http"])]
     {:headers headers
      :body (get request "body")
-     :protocol (get request "protocol")
+     :protocol (get http "protocol")
      :query-string (get request "rawQueryString")
-     :remote-addr (request "sourceIp")
-     :request-method (-> (get-in http "method") (str/lower-case) keyword)
+     :remote-addr (get http "sourceIp")
+     :request-method (-> (get http "method") str/lower-case keyword)
      :scheme (-> headers (get "x-forwarded-proto") keyword)
      :server-name (get-in request ["requestContext" "domainName"])
      :server-port (get headers "x-forwarded-port")

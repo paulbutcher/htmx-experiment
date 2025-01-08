@@ -5,7 +5,8 @@
    [hiccup2.core :refer [html]]
    ;; [ring.adapter.jetty :as jetty]
    [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
-  (:gen-class))
+  ;; (:gen-class)
+  )
 
 (defn index-page []
   (str

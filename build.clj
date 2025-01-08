@@ -3,7 +3,7 @@
   (:require [clojure.tools.build.api :as b]
             [antq.tool :as antq]))
 
-(def main 'paulbutcher.htmx-experiment)
+(def main 'paulbutcher.lambda)
 (def class-dir "target/classes")
 
 (defn help [_]
@@ -34,9 +34,7 @@
          :src-dirs ["src"]
          :ns-compile [main]))
 
-(defn ci "Run the CI pipeline of tests (and build the uberjar)." [opts]
-  (test opts)
-  (outdated opts)
+(defn uber "Build an uberjar" [opts]
   (b/delete {:path "target"})
   (let [opts (uber-opts opts)]
     (println "\nCopying source...")
@@ -44,5 +42,10 @@
     (println (str "\nCompiling " main "..."))
     (b/compile-clj opts)
     (println "\nBuilding JAR...")
-    (b/uber opts))
-  opts)
+    (b/uber opts)))
+
+(defn ci "Run the CI pipeline" [opts]
+  (doto opts
+    test
+    outdated
+    uber))
