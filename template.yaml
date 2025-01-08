@@ -27,6 +27,9 @@ Resources:
       Runtime: java21
       FunctionUrlConfig:
         AuthType: NONE
+      AutoPublishAlias: live
+      SnapStart:
+        ApplyOn: PublishedVersions
     Metadata:
       SkipBuild: True
 
