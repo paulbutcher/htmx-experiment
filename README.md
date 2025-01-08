@@ -8,6 +8,12 @@ Run the project's tests:
 
     $ clojure -T:build test
 
+Debug:
+
+    $ clojure -A:dev
+    user=> :dbg
+    user=> (-main)
+
 Check for outdated dependencies:
 
     $ clojure -T:build outdated
@@ -20,6 +26,6 @@ Run the project's CI pipeline and build an uberjar:
 
     $ clojure -T:build ci
 
-Run that uberjar:
+Deploy that uberjar:
 
-    $ java -jar target/standalone.jar
+    $ sam deploy
