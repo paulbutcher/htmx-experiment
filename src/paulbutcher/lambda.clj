@@ -26,12 +26,12 @@
      :server-port (get headers "x-forwarded-port")
      :uri (get http "path")}))
 
-; Source: https://sideshowcoder.com/2018/05/11/clojure-ring-api-gateway-lambda/
-(defmulti wrap-body class)
-(defmethod wrap-body String [body] body)
-(defmethod wrap-body clojure.lang.ISeq [body] (str/join body))
-(defmethod wrap-body java.io.File [body] (slurp body))
-(defmethod wrap-body java.io.InputStream [body] (slurp body))
+(defmulti ^String body-string class)
+(defmethod body-string nil [_] nil)
+(defmethod body-string String [body] body)
+(defmethod body-string clojure.lang.ISeq [body] (str/join body))
+(defmethod body-string java.io.File [body] (slurp body))
+(defmethod body-string java.io.InputStream [body] (slurp body))
 
 ; Function URL response format https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html#urls-response-payload
 ; Ring response spec: https://github.com/ring-clojure/ring/blob/master/SPEC.md#15-response-maps
@@ -41,7 +41,7 @@
   {:statusCode (:status response)
    :headers (:headers response)
    :isBase64Encoded false
-   :body (-> response :body wrap-body)})
+   :body (-> response :body body-string)})
 
 (defn -handleRequest [_ is os _context]
   (with-open [r (io/reader is)
