@@ -18,6 +18,7 @@
 .rebel_readline_history
 .settings
 .socket-repl-port
+.specstory/
 .sw*
 .vscode
 *.class
