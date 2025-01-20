@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS messages (
            ds)))
 
 (defn query
-  "Execute a HoneySQL query and return results as Clojure maps"
   [honey-query]
   (jdbc/execute! @ds
                  (sql/format honey-query)
