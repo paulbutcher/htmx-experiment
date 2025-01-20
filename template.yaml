@@ -6,10 +6,6 @@ Globals:
     Timeout: 20
     MemorySize: 512
     Tracing: Active
-    LoggingConfig:
-      LogFormat: JSON
-  Api:
-    TracingEnabled: true
 
 Resources:
   Function:
@@ -61,19 +57,22 @@ Resources:
           FromPort: 5432
           ToPort: 5432
           CidrIp: 10.0.0.0/16
-
   Subnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       CidrBlock: 10.0.1.0/24
-      AvailabilityZoneId: use1-az1
+      AvailabilityZone: !Select
+        - 0
+        - Fn::GetAZs: !Ref 'AWS::Region'
   Subnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       CidrBlock: 10.0.2.0/24
-      AvailabilityZoneId: use1-az2
+      AvailabilityZone: !Select
+        - 1
+        - Fn::GetAZs: !Ref 'AWS::Region'
   VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -92,7 +91,7 @@ Resources:
       Engine: postgres
       EngineVersion: 14.15
       DBName: htmx_experiment
-      AllocatedStorage: "20"
+      AllocatedStorage: 20
       StorageEncrypted: true
       ManageMasterUserPassword: true
       MasterUsername: postgres
@@ -115,7 +114,7 @@ Resources:
             AWS: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:root'
           Action:
             - "kms:*"
-          Resource: '*'
+          Resource: "*"
 
 Outputs:
   Endpoint:
