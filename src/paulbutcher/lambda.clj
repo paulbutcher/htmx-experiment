@@ -8,6 +8,14 @@
    [clojure.string :as str]
    [paulbutcher.htmx-experiment :refer [app]]))
 
+(defn get-body [request]
+  (when-let [body (get request "body")]
+    (-> (if (get request "isBase64Encoded")
+          (String. (.decode (java.util.Base64/getDecoder) body))
+          body)
+        (.getBytes)
+        (java.io.ByteArrayInputStream.))))
+
 ; Function URL request format: https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html#urls-request-payload
 ; Ring request spec: https://github.com/ring-clojure/ring/blob/master/SPEC.md#14-request-maps
 (defn ->ring-request
@@ -16,7 +24,7 @@
   (let [headers (-> (get request "headers") (update-keys str/lower-case))
         http (get-in request ["requestContext" "http"])]
     {:headers headers
-     :body (get request "body")
+     :body (get-body request)
      :protocol (get http "protocol")
      :query-string (get request "rawQueryString")
      :remote-addr (get http "sourceIp")
