@@ -10,9 +10,6 @@
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [paulbutcher.db :as db]))
 
-;; Initialize database tables when namespace is loaded
-(db/create-tables!)
-
 (defn message-list []
   (str
    (html
@@ -68,6 +65,6 @@
 
 (def app
   (-> app-routes
-      wrap-with-logger
+      (wrap-with-logger)
       wrap-params
       (wrap-defaults site-defaults)))

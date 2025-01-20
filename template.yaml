@@ -12,7 +12,7 @@ Globals:
     TracingEnabled: true
 
 Resources:
-  HelloWorldFunction:
+  Function:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: target/standalone.jar
@@ -23,6 +23,18 @@ Resources:
       AutoPublishAlias: live
       SnapStart:
         ApplyOn: PublishedVersions
+      Environment:
+        Variables:
+          DB_HOST: !GetAtt Database.Endpoint.Address
+          DB_PASSWORD: !Sub "{{resolve:secretsmanager:${Database.MasterUserSecret.SecretArn}:SecretString:password}}"
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref SecurityGroup
+        SubnetIds:
+          - !Ref Subnet1
+          - !Ref Subnet2
+      Policies:
+        - AWSLambdaVPCAccessExecutionRole
     Metadata:
       SkipBuild: True
   ApplicationResourceGroup:
@@ -37,9 +49,78 @@ Resources:
     Properties:
       ResourceGroupName:
         Ref: ApplicationResourceGroup
-      AutoConfigurationEnabled: "true"
+      AutoConfigurationEnabled: true
+  # https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub "Security group for ${AWS::StackName}"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 10.0.0.0/16
+
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZoneId: use1-az1
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZoneId: use1-az2
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: !Sub "DBSubnet group for ${AWS::StackName}"
+      SubnetIds:
+        - !Ref Subnet1
+        - !Ref Subnet2
+  Database:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t4g.micro
+      Engine: postgres
+      EngineVersion: 14.15
+      DBName: htmx_experiment
+      AllocatedStorage: "20"
+      StorageEncrypted: true
+      ManageMasterUserPassword: true
+      MasterUsername: postgres
+      KmsKeyId: !Ref DatabaseKey
+      VPCSecurityGroups:
+        - !Ref SecurityGroup
+      DBSubnetGroupName: !Ref DBSubnetGroup
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#aws-resource-rds-dbinstance--examples--Creating_a_Secrets_Manager_secret_for_a_master_password
+  DatabaseKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: DatabaseKey
+      EnableKeyRotation: false
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: !Sub 'key-${AWS::StackName}'
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:root'
+          Action:
+            - "kms:*"
+          Resource: '*'
 
 Outputs:
-  HelloWorldFunctionEndpoint:
+  Endpoint:
     Value:
-      Fn::GetAtt: HelloWorldFunctionUrl.FunctionUrl
+      !GetAtt FunctionUrl.FunctionUrl
+  DatabaseEndpoint:
+    Value:
+      !GetAtt Database.Endpoint.Address 

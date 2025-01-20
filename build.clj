@@ -47,5 +47,4 @@
 (defn ci "Run the CI pipeline" [opts]
   (doto opts
     test
-    outdated
     uber))

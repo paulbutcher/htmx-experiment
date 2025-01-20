@@ -29,3 +29,7 @@ Run the project's CI pipeline and build an uberjar:
 Deploy that uberjar:
 
     $ sam deploy
+
+Discover AWS resources:
+
+    $ aws resourcegroupstaggingapi get-resources --region us-east-1
