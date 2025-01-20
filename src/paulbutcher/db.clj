@@ -1,9 +1,9 @@
 (ns paulbutcher.db
   (:require
-   [next.jdbc :as jdbc]
-   [next.jdbc.result-set :as rs]
    [honey.sql :as sql]
-   [honey.sql.helpers :as h]))
+   [honey.sql.helpers :as h]
+   [next.jdbc :as jdbc]
+   [next.jdbc.result-set :as rs]))
 
 (defn create-tables! [ds]
   (jdbc/execute! ds ["

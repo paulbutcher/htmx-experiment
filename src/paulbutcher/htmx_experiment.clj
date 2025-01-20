@@ -2,13 +2,13 @@
   (:require
    [compojure.core :refer [defroutes GET POST]]
    [compojure.route :as route]
-   [hiccup2.core :refer [html]]
    [hiccup.util :refer [raw-string]]
+   [hiccup2.core :refer [html]]
+   [paulbutcher.db :as db]
+   [ring.logger :refer [wrap-with-logger]]
    [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
    [ring.middleware.params :refer [wrap-params]]
-   [ring.logger :refer [wrap-with-logger]]
-   [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [paulbutcher.db :as db]))
+   [ring.util.anti-forgery :refer [anti-forgery-field]]))
 
 (defn message-list []
   (str
