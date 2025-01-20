@@ -23,14 +23,7 @@
    (html
     [:head
      [:title "HTMX Example"]
-     [:script {:src "https://unpkg.com/htmx.org@2.0.4"}]
-     [:meta {:name "csrf-token" :content (anti-forgery-field)}]
-     [:script (raw-string "
-       document.addEventListener('DOMContentLoaded', function() {
-         document.body.addEventListener('htmx:configRequest', function(evt) {
-           evt.detail.headers['X-CSRF-Token'] = document.querySelector('meta[name=\"csrf-token\"]').getAttribute('content');
-         });
-       });")]]
+     [:script {:src "https://unpkg.com/htmx.org@2.0.4"}]]
     [:body
      [:h1 "HTMX Example"]
      [:div
@@ -63,6 +56,6 @@
 
 (def app
   (-> app-routes
-      (wrap-with-logger)
+      wrap-with-logger
       wrap-params
       (wrap-defaults site-defaults)))
