@@ -16,7 +16,6 @@
     [:div#messages
      (for [message (db/get-messages)]
        [:div.message
-        {:class "mb-2 p-2 border rounded"}
         (:content message)])])))
 
 (defn index-page []
@@ -31,21 +30,20 @@
          document.body.addEventListener('htmx:configRequest', function(evt) {
            evt.detail.headers['X-CSRF-Token'] = document.querySelector('meta[name=\"csrf-token\"]').getAttribute('content');
          });
-       });")]
-     [:link {:href "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" :rel "stylesheet"}]]
-    [:body.container.mx-auto.p-4
-     [:h1.text-2xl.mb-4 "HTMX Example"]
-     [:div.mb-4
+       });")]]
+    [:body
+     [:h1 "HTMX Example"]
+     [:div
       [:form#message-form
        {:hx-post "/messages"
         :hx-target "#messages"
         :hx-swap "outerHTML"}
        (raw-string (anti-forgery-field))
-       [:input#content.border.rounded.p-2.mr-2
+       [:input#content
         {:type "text"
          :name "content"
          :placeholder "Enter a message"}]
-       [:button.bg-blue-500.text-white.px-4.py-2.rounded
+       [:button
         {:type "submit"}
         "Send"]]]
      [:div#messages-container
