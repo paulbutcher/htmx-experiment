@@ -56,6 +56,6 @@
 
 (def app
   (-> app-routes
-      wrap-with-logger
       wrap-params
-      (wrap-defaults site-defaults)))
+      (wrap-defaults site-defaults)
+      wrap-with-logger))
