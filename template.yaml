@@ -6,8 +6,6 @@ Globals:
     Timeout: 20
     MemorySize: 512
     Tracing: Active
-    LoggingConfig:
-      LogFormat: JSON
 
 Resources:
   Function:
