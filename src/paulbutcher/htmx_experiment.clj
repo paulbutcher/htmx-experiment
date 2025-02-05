@@ -35,10 +35,10 @@
   (message-list))
 
 (defroutes app-routes
-           (GET "/" [] (index-page))
-           (GET "/messages" [] (message-list))
-           (POST "/messages" {params :params} (add-message params))
-           (route/not-found "Not Found"))
+  (GET "/" [] (index-page))
+  (GET "/messages" [] (message-list))
+  (POST "/messages" {params :params} (add-message params))
+  (route/not-found "Not Found"))
 
 (def app
   (-> app-routes

@@ -36,8 +36,7 @@ Resources:
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
-      Name:
-        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      Name: !Sub ApplicationInsights-SAM-${AWS::StackName}
       ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
   ApplicationInsightsMonitoring:
@@ -64,7 +63,7 @@ Resources:
       CidrBlock: 10.0.1.0/24
       AvailabilityZone: !Select
         - 0
-        - Fn::GetAZs: !Ref 'AWS::Region'
+        - Fn::GetAZs: !Ref "AWS::Region"
   Subnet2:
     Type: AWS::EC2::Subnet
     Properties:
@@ -72,7 +71,7 @@ Resources:
       CidrBlock: 10.0.2.0/24
       AvailabilityZone: !Select
         - 1
-        - Fn::GetAZs: !Ref 'AWS::Region'
+        - Fn::GetAZs: !Ref "AWS::Region"
   VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -107,16 +106,15 @@ Resources:
       EnableKeyRotation: false
       KeyPolicy:
         Version: 2012-10-17
-        Id: !Sub 'key-${AWS::StackName}'
+        Id: !Sub "key-${AWS::StackName}"
         Statement:
-        - Effect: Allow
-          Principal:
-            AWS: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:root'
-          Action:
-            - "kms:*"
-          Resource: "*"
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:root"
+            Action:
+              - "kms:*"
+            Resource: "*"
 
 Outputs:
   Endpoint:
-    Value:
-      !GetAtt FunctionUrl.FunctionUrl
+    Value: !GetAtt FunctionUrl.FunctionUrl
